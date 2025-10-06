@@ -62,27 +62,32 @@ for _ in range(3):
 st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
-# --- Gallery Images + Messages ---
+# --- Gallery Images + Messages in same frame ---
 gallery_items = [
     {"img": "images/IMG-20251006-WA0005.jpg", "message": "They say there’s no day like the present. So, cherish the day."},
     {"img": "images/IMG-20251006-WA0006.jpg", "message": "May God continue to keep you in His graces and bless you abundantly. Wishing you a happy and bountiful birthday!"},
     {"img": "images/IMG-20251006-WA0007.jpg", "message": "Wishing you divine peace and happiness today and throughout your life."}
 ]
 
-st.write("---")
-st.write("### Some of our favorite moments:")
-
-cols = st.columns(len(gallery_items))
-for col, item in zip(cols, gallery_items):
+# Flex container for gallery
+st.markdown("<div style='display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;'>", unsafe_allow_html=True)
+for item in gallery_items:
     img_path = item["img"]
     msg = item["message"]
     if os.path.exists(img_path):
         img = Image.open(img_path)
-        col.markdown(f"<div class='gallery-frame'>", unsafe_allow_html=True)
-        col.image(img, use_container_width=True)
-        col.markdown(f"<div class='gallery-caption'>{msg}</div></div>", unsafe_allow_html=True)
+        st.markdown(
+            f"""
+            <div class="gallery-frame" style="width: 300px;">
+                <img src="{img_path}" style="width: 100%; border-radius: 10px;">
+                <div class="gallery-caption">{msg}</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
     else:
-        col.warning(f"Image not found: {img_path}")
+        st.warning(f"Image not found: {img_path}")
+st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Central Main Message ---
 main_message = """
@@ -94,17 +99,15 @@ May the light of the Lord shine upon you and grant you happiness on this birthda
 """
 st.markdown(main_message, unsafe_allow_html=True)
 
-# --- Videos Side by Side ---
+# --- Videos Side by Side in same frame ---
 video_files = ["videos/video1.mp4", "videos/video2.mp4"]
-st.write("---")
-st.write("### Birthday Videos:")
-video_cols = st.columns(len(video_files))
-
-for col, vid in zip(video_cols, video_files):
+st.markdown("<div style='display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;'>", unsafe_allow_html=True)
+for vid in video_files:
     if os.path.exists(vid):
-        col.video(vid)
+        st.video(vid, format="video/mp4", start_time=0)
     else:
-        col.warning(f"Video not found: {vid}")
+        st.warning(f"Video not found: {vid}")
+st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Closing line ---
 st.markdown("<h3 style='text-align: center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
