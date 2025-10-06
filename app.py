@@ -7,55 +7,40 @@ import streamlit.components.v1 as components
 # --- Page config ---
 st.set_page_config(page_title="Happy Birthday Kitso", layout="centered")
 
-# --- Full-page Black & Gold Confetti (10 seconds) ---
+# --- Black & Gold confetti effect at the start (10 seconds) ---
 components.html("""
+<div id="confetti-holder"></div>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <script>
-function launchFullPageConfetti() {
-    // Create a full-page canvas
-    const canvas = document.createElement('canvas');
-    canvas.id = 'confetti-canvas';
-    canvas.style.position = 'fixed';
-    canvas.style.top = '0';
-    canvas.style.left = '0';
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.pointerEvents = 'none';
-    canvas.style.zIndex = 9999;
-    document.body.appendChild(canvas);
+function launchBlackGoldConfetti() {
+    var duration = 10000; // 10 seconds
+    var animationEnd = Date.now() + duration;
 
-    const myConfetti = confetti.create(canvas, { resize: true, useWorker: true });
-
-    const duration = 10000; // 10 seconds
-    const animationEnd = Date.now() + duration;
-
-    const interval = setInterval(function() {
-        const timeLeft = animationEnd - Date.now();
+    var interval = setInterval(function() {
+        var timeLeft = animationEnd - Date.now();
         if (timeLeft <= 0) {
             clearInterval(interval);
             return;
         }
 
-        const particleCount = 120 * (timeLeft / duration);
-        myConfetti({
+        var particleCount = 120 * (timeLeft / duration); // denser
+        confetti({
             particleCount: particleCount,
             startVelocity: 50,
             spread: 360,
             ticks: 60,
             gravity: 0.5,
-            colors: ['#FFD700','#FFC700','#FFB700','#000000'], // gold + black
+            colors: ['#FFD700', '#FFC700', '#FFB700', '#000000'], // gold + black
             origin: { x: Math.random(), y: Math.random() - 0.2 },
-            scalar: Math.random() * 0.8 + 0.6
+            scalar: Math.random() * 0.8 + 0.6 // sparkle effect
         });
-    }, 200);
+    }, 200); // bursts every 200ms
 }
 
-// Run confetti shortly after the page loads
-window.addEventListener('load', () => {
-    setTimeout(launchFullPageConfetti, 100);
-});
+// Run confetti shortly after component loads
+setTimeout(launchBlackGoldConfetti, 100);
 </script>
-""", height=1)
+""", height=50)
 
 # --- Custom CSS ---
 st.markdown("""
