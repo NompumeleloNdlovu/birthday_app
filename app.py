@@ -86,9 +86,9 @@ cols = st.columns(len(gallery_items))
 for i, item in enumerate(gallery_items):
     with cols[i]:
         if os.path.exists(item["img"]):
-            # Open image and crop from top
             img = Image.open(item["img"])
-            img = ImageOps.fit(img, (400, 300), method=Image.Resampling.LANCZOS, centering=(0.5, 0.0))
+            # Crop mostly from top, show some bottom
+            img = ImageOps.fit(img, (400, 300), method=Image.Resampling.LANCZOS, centering=(0.5, 0.2))
             st.image(img, use_container_width=False)
             st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
         else:
