@@ -86,9 +86,9 @@ cols = st.columns(len(gallery_items))
 for i, item in enumerate(gallery_items):
     with cols[i]:
         if os.path.exists(item["img"]):
-            # Open image and crop/resize
+            # Open image and crop/resize (Pillow 10+ compatible)
             img = Image.open(item["img"])
-            img = ImageOps.fit(img, (300, 250), Image.ANTIALIAS, centering=(0.5, 0.5))
+            img = ImageOps.fit(img, (300, 250), method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
             st.image(img, use_container_width=False)
             st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
         else:
