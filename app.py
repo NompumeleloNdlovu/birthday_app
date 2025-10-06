@@ -1,10 +1,11 @@
 import streamlit as st
 from PIL import Image, ImageOps
 import os
+import base64
 import time
 
 # --- Page config ---
-st.set_page_config(page_title="Happy Birthday Kitso", page_icon=None, layout="centered")
+st.set_page_config(page_title="Happy Birthday Kitso", layout="centered")
 
 # --- Custom CSS ---
 st.markdown("""
@@ -36,9 +37,9 @@ h3 {
     text-align: center;
     font-size: 1.2rem;
     line-height: 1.6;
-    color: black;  /* Black text */
+    color: black;
     font-family: 'Cinzel', serif;
-    box-shadow: none;  /* Removed shadow */
+    box-shadow: none;
 }
 
 .gallery-container {
@@ -47,16 +48,17 @@ h3 {
 }
 
 .gallery-frame {
-    background-color: black;  /* Frame back to black */
+    background-color: black;
     border-radius: 15px; 
     text-align: center; 
     padding: 10px; 
     transition: transform 0.3s, box-shadow 0.3s;
-    border-right: 2px solid black; /* Black line to separate images */
+    border-right: 2px solid black;
+    flex: 0 0 auto;
 }
 
 .gallery-frame:last-child {
-    border-right: none; /* No border on last image */
+    border-right: none;
 }
 
 .gallery-frame:hover { 
@@ -64,10 +66,20 @@ h3 {
     box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
 }
 
+.gallery-frame img { 
+    width: 400px; 
+    height: 300px; 
+    object-fit: contain; 
+    border-radius: 10px; 
+    display: block; 
+    margin: auto; 
+    background-color: black;
+}
+
 .gallery-caption { 
     margin-top: 10px; 
     font-weight: bold; 
-    color: black;  /* Black captions */
+    color: black;  
     font-family: 'Cinzel', serif; 
 }
 </style>
@@ -93,23 +105,26 @@ gallery_items = [
     {"img":"images/IMG-20251006-WA0007.jpg","msg":"Wishing you divine peace and happiness today and throughout your life."}
 ]
 
-st.markdown("<div class='gallery-container'>", unsafe_allow_html=True)
+# --- Helper: convert image to base64 ---
+def image_to_base64(img_path):
+    with open(img_path, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode("utf-8")
 
-for i, item in enumerate(gallery_items):
+# --- Display gallery horizontally ---
+st.markdown("<div class='gallery-container'>", unsafe_allow_html=True)
+for item in gallery_items:
     if os.path.exists(item["img"]):
-        img = Image.open(item["img"])
-        # Fit full image into 400x300 with padding
-        img = ImageOps.contain(img, (400, 300), method=Image.Resampling.LANCZOS)
-        framed_img = Image.new("RGB", (400, 300), "black")  # Black frame
-        framed_img.paste(img, ((400 - img.width)//2, (300 - img.height)//2))
-        
-        # Display image
-        st.image(framed_img, use_container_width=False)
-        st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
-        time.sleep(0.3)  # Sequential fade-in
+        img_b64 = image_to_base64(item["img"])
+        st.markdown(f"""
+        <div class='gallery-frame'>
+            <img src='data:image/png;base64,{img_b64}'>
+            <div class='gallery-caption'>{item['msg']}</div>
+        </div>
+        """, unsafe_allow_html=True)
+        time.sleep(0.3)  # Simulated fade-in
     else:
         st.warning(f"Image not found: {item['img']}")
-
 st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Main message ---
