@@ -1,51 +1,66 @@
 import streamlit as st
+from PIL import Image
 import os
-import base64
 
 # --- Page config ---
 st.set_page_config(page_title="Happy Birthday!", page_icon="🎉", layout="centered")
 
-# --- Remove Streamlit top padding ---
-st.markdown("""
-<style>
-.css-18e3th9 {padding-top: 0rem;}
-.css-1d391kg {padding-top: 0rem;}
-</style>
-""", unsafe_allow_html=True)
-
 # --- Custom CSS ---
 st.markdown("""
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
 <style>
-.stApp { background-color: #fff8e7; color: black; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+.stApp { background-color: #fff8e7; color: black; font-family: 'Cinzel', serif; }
 
-/* Horizontal gallery */
-.gallery-container { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 20px; padding: 20px 0; justify-content: flex-start; }
-.gallery-container::-webkit-scrollbar { display: none; }
-.gallery-container { -ms-overflow-style: none; scrollbar-width: none; }
+h1 { color: black; font-family: 'Cinzel Decorative', cursive; text-align: center; }
+h3 { color: black; font-family: 'Cinzel', serif; text-align: center; }
 
-.gallery-frame { background-color: black; border-radius: 15px; flex: 0 0 auto; width: 300px; text-align: center; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s; }
-.gallery-frame:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+.main-message {
+    background-color: #fdf3d9;
+    border-radius: 20px;
+    padding: 25px;
+    margin: 40px auto;
+    max-width: 700px;
+    text-align: center;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: black;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    font-family: 'Cinzel', serif;
+}
 
-.gallery-frame img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; }
-.gallery-caption { padding: 10px; color: gold; font-weight: bold; font-size: 0.95rem; font-family: 'Cinzel', serif; }
+.gallery-frame {
+    background-color: black;
+    border-radius: 15px;
+    text-align: center;
+    padding: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
 
-h1 { color: black; margin-top: 10px; margin-bottom: 10px; font-family: 'Cinzel Decorative', cursive; }
-h3 { color: black; margin-top: 10px; margin-bottom: 10px; font-family: 'Cinzel', serif; }
+.gallery-frame:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
 
-.main-message { background-color: #fdf3d9; border-radius: 20px; padding: 25px; margin: 40px auto; max-width: 700px; text-align: center; font-size: 1.2rem; line-height: 1.6; color: black; box-shadow: 0 6px 20px rgba(0,0,0,0.2); font-family: 'Cinzel', serif; }
+.gallery-frame img {
+    width: 300px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    margin: auto;
+}
+
+.gallery-caption {
+    margin-top: 10px;
+    font-weight: bold;
+    color: gold;
+    font-family: 'Cinzel', serif;
+}
 </style>
 """, unsafe_allow_html=True)
 
 # --- Title ---
-st.markdown("<h1 style='text-align:center;'>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align:center;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
-
-# --- Helper function to convert image to base64 ---
-def img_to_base64(img_path):
-    with open(img_path, "rb") as f:
-        data = f.read()
-    return base64.b64encode(data).decode()
+st.markdown("<h1>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
+st.markdown("<h3>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
 # --- Gallery images ---
 gallery_items = [
@@ -54,21 +69,14 @@ gallery_items = [
     {"img":"images/IMG-20251006-WA0007.jpg","msg":"Wishing you divine peace and happiness today and throughout your life."}
 ]
 
-gallery_html = "<div class='gallery-container'>"
-for item in gallery_items:
-    if os.path.exists(item["img"]):
-        img_base64 = img_to_base64(item["img"])
-        gallery_html += f"""
-        <div class='gallery-frame'>
-            <img src='data:image/jpeg;base64,{img_base64}'>
-            <div class='gallery-caption'>{item['msg']}</div>
-        </div>
-        """
-    else:
-        gallery_html += f"<div class='gallery-frame'><div class='gallery-caption'>Image not found: {item['img']}</div></div>"
-gallery_html += "</div>"
-
-st.markdown(gallery_html, unsafe_allow_html=True)
+cols = st.columns(len(gallery_items))
+for i, item in enumerate(gallery_items):
+    with cols[i]:
+        if os.path.exists(item["img"]):
+            st.image(item["img"], use_container_width=False, width=300)
+            st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
+        else:
+            st.warning(f"Image not found: {item['img']}")
 
 # --- Main message ---
 st.markdown("""
@@ -89,3 +97,4 @@ else:
 
 # --- Closing line ---
 st.markdown("<h3 style='text-align:center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
+
