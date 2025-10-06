@@ -47,34 +47,59 @@ components.html(balloons_html, height=600, width=0)
 st.markdown("""
 <style>
 .stApp {
-    background-color: #fff8e7;  /* Cream-white background */
+    background-color: #fff8e7;  /* Cream-white */
     color: black;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-.main-message {
-    text-align: center;
-    margin: 40px 20px;
-    font-size: 1.2rem;
-    line-height: 1.6;
-    color: black;
-}
+
+/* Modern gallery frame */
 .gallery-frame {
     background-color: black;
-    border-radius: 15px;
+    border-radius: 20px;
     padding: 15px;
-    margin: 20px auto;
+    margin: 25px auto;
     max-width: 450px;
     text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+}
+.gallery-frame:hover {
+    transform: scale(1.03);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.5);
 }
 .gallery-frame img {
-    border-radius: 10px;
+    border-radius: 15px;
     max-width: 100%;
     height: auto;
 }
 .gallery-caption {
     margin-top: 10px;
-    font-size: 0.95rem;
-    color: black;  /* Black captions */
+    font-size: 1rem;
+    color: #FFD700;  /* Gold captions */
 }
+
+/* Main message card */
+.main-message {
+    background-color: #fdf3d9;
+    border-radius: 20px;
+    padding: 25px;
+    margin: 40px auto;
+    max-width: 700px;
+    text-align: center;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: black;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
 h1, h3 {
     color: black;
 }
@@ -88,34 +113,34 @@ if os.path.exists(music_file):
         st.audio(f.read(), format="audio/mp3")
 
 # --- Title ---
-st.markdown("<h1 style='text-align:center;'>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align:center;'> Happy Birthday, Kitso! </h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align:center;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
-# --- Gallery Images Listed Vertically ---
+# --- Gallery Images Listed Vertically with Fade-in ---
 gallery_items = [
     {"img":"images/IMG-20251006-WA0005.jpg","msg":"They say there’s no day like the present. So, cherish the day."},
     {"img":"images/IMG-20251006-WA0006.jpg","msg":"May God continue to keep you in His graces and bless you abundantly. Wishing you a happy and bountiful birthday!"},
     {"img":"images/IMG-20251006-WA0007.jpg","msg":"Wishing you divine peace and happiness today and throughout your life."}
 ]
 
-for item in gallery_items:
+for idx, item in enumerate(gallery_items):
     if os.path.exists(item["img"]):
         img = Image.open(item["img"])
-        st.markdown("<div class='gallery-frame'>", unsafe_allow_html=True)
+        st.markdown(f"<div class='gallery-frame' style='animation-delay:{idx*0.5}s'>", unsafe_allow_html=True)
         st.image(img, use_container_width=True)
         st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
-        time.sleep(1)  # Sequential appearance
+        time.sleep(0.5)
     else:
         st.warning(f"Image not found: {item['img']}")
 
-# --- Main Message ---
+# --- Main Message Card ---
 st.markdown("""
-<p class='main-message'>
+<div class='main-message'>
 May the light of the Lord shine upon you and grant you happiness on this birthday and for many years to come.<br><br>
 “Delight yourself in the Lord, and He will give you the desires of your heart.” —Psalm 37:4<br>
 “The Lord will guide you always; He will satisfy your needs in a sun-scorched land and will strengthen your frame.” —Isaiah 58:11
-</p>
+</div>
 """, unsafe_allow_html=True)
 
 # --- Video with Custom Message ---
@@ -127,4 +152,4 @@ else:
     st.warning(f"Video not found: {video_file}")
 
 # --- Closing Line ---
-st.markdown("<h3 style='text-align:center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align:center;'> Here's to many more beautiful memories! </h3>", unsafe_allow_html=True)
