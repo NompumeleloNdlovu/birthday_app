@@ -15,28 +15,47 @@ st.markdown(
         color: black;
     }
 
-    /* Image hover pop-out effect */
+    /* Image frame with pop-out animation */
+    .gallery-frame {
+        text-align: center;
+        padding: 10px;
+        margin-bottom: 20px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        border-radius: 15px;
+        display: inline-block;
+    }
+
+    .gallery-frame:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    /* Image inside frame */
     .gallery-img {
         width: 100%;
-        transition: transform 0.3s, box-shadow 0.3s;
         border-radius: 10px;
-        margin-bottom: 20px;
     }
 
-    .gallery-img:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    /* Image caption */
+    .gallery-caption {
+        margin-top: 10px;
+        font-size: 1rem;
+        color: #333;
     }
 
-    /* Centered title */
-    .title {
+    /* Centered main message */
+    .main-message {
         text-align: center;
-        color: #ff4b4b;
+        margin: 40px 20px;
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: #000;
     }
 
-    /* Subtext */
-    .subtitle {
+    /* Video container */
+    .video-container {
         text-align: center;
+        margin-bottom: 30px;
     }
     </style>
     """,
@@ -52,48 +71,69 @@ if os.path.exists(music_file):
 else:
     st.warning("🎵 Music file not found!")
 
-# --- Confetti (balloons) ---
-st.balloons()
+# --- Realistic Gold Confetti ---
+for _ in range(3):
+    st.balloons()  # multiple batches to simulate gold
 
-# --- Title and Subtext ---
-st.markdown("<h1 class='title'>🎉 Happy Birthday, Sarah! 🎉</h1>", unsafe_allow_html=True)
-st.markdown("<h3 class='subtitle'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
+# --- Title ---
+st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>🎉 Happy Birthday, Sarah! 🎉</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
-# --- Main Image ---
-main_image_path = "images/IMG-20251006-WA0005.jpg"
-if os.path.exists(main_image_path):
-    main_image = Image.open(main_image_path)
-    st.image(main_image, caption="Birthday Star", use_container_width=True, output_format="JPEG")
-else:
-    st.warning(f"Main image not found: {main_image_path}")
-
-st.write("---")
-
-# --- Gallery Section ---
-st.write("### Some of our favorite moments:")
-
-# Use columns for layout
-col1, col2, col3 = st.columns(3)
-
-gallery_images = [
-    "images/IMG-20251006-WA0006.jpg",
-    "images/IMG-20251006-WA0007.jpg",
-    "images/IMG-20251006-WA0005.jpg",  # reuse main image
+# --- Gallery Images + Messages ---
+gallery_items = [
+    {
+        "img": "images/IMG-20251006-WA0005.jpg",
+        "message": "They say there’s no day like the present. So, cherish the day."
+    },
+    {
+        "img": "images/IMG-20251006-WA0006.jpg",
+        "message": "May God continue to keep you in His graces and bless you abundantly. Wishing you a happy and bountiful birthday!"
+    },
+    {
+        "img": "images/IMG-20251006-WA0007.jpg",
+        "message": "Wishing you divine peace and happiness today and throughout your life."
+    }
 ]
 
-for col, img_path in zip([col1, col2, col3], gallery_images):
+st.write("---")
+st.write("### Some of our favorite moments:")
+
+cols = st.columns(len(gallery_items))
+for col, item in zip(cols, gallery_items):
+    img_path = item["img"]
+    msg = item["message"]
     if os.path.exists(img_path):
-        img = Image.open(img_path)
-        col.image(img, use_container_width=True, output_format="JPEG", caption=None)
-        # Add class for hover effect
         col.markdown(
-            f"<img src='{img_path}' class='gallery-img'>",
+            f"""
+            <div class="gallery-frame">
+                <img src="{img_path}" class="gallery-img">
+                <div class="gallery-caption">{msg}</div>
+            </div>
+            """,
             unsafe_allow_html=True
         )
     else:
         col.warning(f"Image not found: {img_path}")
 
-st.write("---")
+# --- Central Main Message ---
+main_message = """
+<p class="main-message">
+May the light of the Lord shine upon you and grant you happiness on this birthday and for many years to come.<br><br>
+“Delight yourself in the Lord, and He will give you the desires of your heart.” —Psalm 37:4<br>
+“The Lord will guide you always; He will satisfy your needs in a sun-scorched land and will strengthen your frame.” —Isaiah 58:11
+</p>
+"""
+st.markdown(main_message, unsafe_allow_html=True)
 
-# --- Closing Message ---
-st.markdown("<h3 class='subtitle'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
+# --- Videos ---
+videos = ["videos/video1.mp4", "videos/video2.mp4"]
+st.write("---")
+st.write("### Birthday Videos:")
+for vid in videos:
+    if os.path.exists(vid):
+        st.video(vid)
+    else:
+        st.warning(f"Video not found: {vid}")
+
+# --- Closing line ---
+st.markdown("<h3 style='text-align: center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
