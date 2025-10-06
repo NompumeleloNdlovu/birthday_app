@@ -2,9 +2,41 @@ import streamlit as st
 from PIL import Image
 import os
 import base64
+import streamlit.components.v1 as components
 
 # --- Page config ---
 st.set_page_config(page_title="Happy Birthday Kitso", layout="centered")
+
+# --- Confetti effect at the start ---
+components.html("""
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script>
+  window.onload = () => {
+    var duration = 3000; // 3 seconds
+    var animationEnd = Date.now() + duration;
+    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
+
+    function randomInRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    var interval = setInterval(function() {
+      var timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        return;
+      }
+
+      var particleCount = 50 * (timeLeft / duration);
+      confetti(Object.assign({}, defaults, {
+        particleCount,
+        origin: { x: randomInRange(0, 1), y: Math.random() - 0.2 }
+      }));
+    }, 250);
+  }
+</script>
+""", height=0)
 
 # --- Custom CSS ---
 st.markdown("""
