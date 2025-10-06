@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 # --- Page config ---
 st.set_page_config(page_title="Happy Birthday!", page_icon="🎉", layout="centered")
 
-# --- Black Balloons (Working) ---
+# --- Black Balloons (still black for contrast) ---
 balloons_html = """
 <style>
 .balloon {
@@ -41,25 +41,39 @@ for (let i=0; i<30; i++){
 }
 </script>
 """
-components.html(balloons_html, height=600, width=0)  # height >0 is required
+components.html(balloons_html, height=600, width=0)
 
-# --- Custom CSS ---
+# --- Custom CSS for Black Background + Gold Text ---
 st.markdown("""
 <style>
 .stApp {
-    background-color: #fff8e7;  /* Cream white */
-    color: black;
+    background-color: black;
+    color: #FFD700;  /* Gold text */
 }
 .main-message {
     text-align: center;
     margin: 40px 20px;
     font-size: 1.2rem;
     line-height: 1.6;
+    color: #FFD700;
+}
+.gallery-frame {
+    background-color: #222;  /* Dark frame */
+    border-radius: 15px;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.gallery-frame img {
+    border-radius: 10px;
 }
 .gallery-caption {
-    text-align: center;
-    font-size: 0.95rem;
     margin-top: 5px;
+    font-size: 0.95rem;
+    color: #FFD700;
+}
+h1, h3 {
+    color: #FFD700;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -71,10 +85,10 @@ if os.path.exists(music_file):
         st.audio(f.read(), format="audio/mp3")
 
 # --- Title ---
-st.markdown("<h1 style='text-align:center;color:black;'>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align:center;color:black;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align:center;'>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align:center;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
-# --- Gallery Images Sequentially in Columns ---
+# --- Gallery Images Sequentially in Columns with Frames ---
 gallery_items = [
     {"img":"images/IMG-20251006-WA0005.jpg","msg":"They say there’s no day like the present. So, cherish the day."},
     {"img":"images/IMG-20251006-WA0006.jpg","msg":"May God continue to keep you in His graces and bless you abundantly. Wishing you a happy and bountiful birthday!"},
@@ -85,9 +99,11 @@ cols = st.columns(len(gallery_items))
 for col, item in zip(cols, gallery_items):
     if os.path.exists(item["img"]):
         img = Image.open(item["img"])
+        col.markdown("<div class='gallery-frame'>", unsafe_allow_html=True)
         col.image(img, use_container_width=True)
         col.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
-        time.sleep(1)  # appear one by one
+        col.markdown("</div>", unsafe_allow_html=True)
+        time.sleep(1)  # sequential appearance
     else:
         col.warning(f"Image not found: {item['img']}")
 
@@ -104,9 +120,9 @@ May the light of the Lord shine upon you and grant you happiness on this birthda
 video_file = "videos/video1.mp4"
 if os.path.exists(video_file):
     st.video(video_file, format="video/mp4", start_time=0)
-    st.markdown("<h3 style='text-align:center;color:black;'>CAN'T WAIT TO SEE YOU REACH EVEN GREATER HEIGHTS, PROUD OF YOU AND ALL YOUR ACHIEVEMENTS, KEEP THRIVING</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align:center;'>CAN'T WAIT TO SEE YOU REACH EVEN GREATER HEIGHTS, PROUD OF YOU AND ALL YOUR ACHIEVEMENTS, KEEP THRIVING</h3>", unsafe_allow_html=True)
 else:
     st.warning(f"Video not found: {video_file}")
 
 # --- Closing Line ---
-st.markdown("<h3 style='text-align:center;color:black;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align:center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
