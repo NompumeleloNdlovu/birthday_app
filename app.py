@@ -13,7 +13,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- Custom CSS for modern gallery ---
+# --- Custom CSS ---
 st.markdown("""
 <style>
 .stApp {
@@ -22,12 +22,14 @@ st.markdown("""
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Horizontal scrollable gallery */
 .gallery-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 10px 0;
     gap: 20px;
-    margin-top: 10px;
+    justify-content: flex-start;
     margin-bottom: 30px;
 }
 
@@ -35,17 +37,23 @@ st.markdown("""
     background-color: black;
     border-radius: 15px;
     width: 300px;
-    overflow: hidden;
+    flex: 0 0 auto;  /* Prevent shrinking */
     text-align: center;
-    transition: transform 0.3s, box-shadow 0.3s;
     display: flex;
     flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.gallery-frame:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
 .gallery-frame img {
     width: 100%;
     height: 250px;
     object-fit: cover;
+    border-radius: 10px;
 }
 
 .gallery-caption {
@@ -80,7 +88,7 @@ h1, h3 {
 st.markdown("<h1 style='text-align:center;'>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align:center;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
-# --- Gallery images ---
+# --- Gallery images horizontally ---
 gallery_items = [
     {"img":"images/IMG-20251006-WA0005.jpg","msg":"They say there’s no day like the present. So, cherish the day."},
     {"img":"images/IMG-20251006-WA0006.jpg","msg":"May God continue to keep you in His graces and bless you abundantly. Wishing you a happy and bountiful birthday!"},
@@ -117,4 +125,3 @@ else:
 
 # --- Closing line ---
 st.markdown("<h3 style='text-align:center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
-
