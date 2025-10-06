@@ -12,22 +12,23 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- Custom CSS ---
+# --- Custom CSS with Google Fonts ---
 st.markdown("""
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
 <style>
 .stApp {
-    background-color: #fff8e7;
+    background-color: #fff8e7;  /* Cream-white background */
     color: black;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Horizontal gallery with black frames */
+/* Horizontal gallery */
 .gallery-container {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
     gap: 20px;
-    padding: 10px 0;
+    padding: 20px 0;
     justify-content: flex-start;
 }
 
@@ -39,6 +40,12 @@ st.markdown("""
     text-align: center;
     display: flex;
     flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.gallery-frame:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
 .gallery-frame img {
@@ -53,12 +60,21 @@ st.markdown("""
     color: black;
     font-weight: bold;
     font-size: 0.95rem;
+    font-family: 'Cinzel', serif;  /* Apply Cinzel font */
 }
 
-h1, h3 {
+h1 {
     color: black;
     margin-top: 10px;
     margin-bottom: 10px;
+    font-family: 'Cinzel Decorative', cursive;  /* Decorative font for title */
+}
+
+h3 {
+    color: black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: 'Cinzel', serif;  /* Cinzel for subtitles/messages */
 }
 
 .main-message {
@@ -72,6 +88,7 @@ h1, h3 {
     line-height: 1.6;
     color: black;
     box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    font-family: 'Cinzel', serif;  /* Cinzel for main message */
 }
 </style>
 """, unsafe_allow_html=True)
@@ -80,7 +97,7 @@ h1, h3 {
 st.markdown("<h1 style='text-align:center;'>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align:center;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
-# --- Gallery images horizontally using HTML ---
+# --- Gallery images ---
 gallery_items = [
     {"img":"images/IMG-20251006-WA0005.jpg","msg":"They say there’s no day like the present. So, cherish the day."},
     {"img":"images/IMG-20251006-WA0006.jpg","msg":"May God continue to keep you in His graces and bless you abundantly. Wishing you a happy and bountiful birthday!"},
@@ -121,4 +138,3 @@ else:
 
 # --- Closing line ---
 st.markdown("<h3 style='text-align:center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
-
