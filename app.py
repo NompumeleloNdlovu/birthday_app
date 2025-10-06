@@ -7,13 +7,13 @@ import streamlit.components.v1 as components
 # --- Page config ---
 st.set_page_config(page_title="Happy Birthday Kitso", layout="centered")
 
-# --- Gold confetti effect at the start (5 seconds, denser) ---
+# --- Black & Gold confetti effect at the start (10 seconds) ---
 components.html("""
 <div id="confetti-holder"></div>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <script>
-function launchGoldConfetti() {
-    var duration = 5000; // 5 seconds
+function launchBlackGoldConfetti() {
+    var duration = 10000; // 10 seconds
     var animationEnd = Date.now() + duration;
 
     var interval = setInterval(function() {
@@ -23,22 +23,22 @@ function launchGoldConfetti() {
             return;
         }
 
-        var particleCount = 100 * (timeLeft / duration); // more particles
+        var particleCount = 120 * (timeLeft / duration); // denser
         confetti({
             particleCount: particleCount,
             startVelocity: 50,
             spread: 360,
             ticks: 60,
             gravity: 0.5,
-            colors: ['#FFD700', '#FFC700', '#FFB700'], // gold shades
+            colors: ['#FFD700', '#FFC700', '#FFB700', '#000000'], // gold + black
             origin: { x: Math.random(), y: Math.random() - 0.2 },
-            scalar: Math.random() * 0.8 + 0.6 // random size for sparkle effect
+            scalar: Math.random() * 0.8 + 0.6 // sparkle effect
         });
     }, 200); // bursts every 200ms
 }
 
 // Run confetti shortly after component loads
-setTimeout(launchGoldConfetti, 100);
+setTimeout(launchBlackGoldConfetti, 100);
 </script>
 """, height=50)
 
