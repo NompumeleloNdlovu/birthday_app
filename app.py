@@ -7,6 +7,14 @@ import streamlit.components.v1 as components
 # --- Page config ---
 st.set_page_config(page_title="Happy Birthday!", page_icon="🎉", layout="centered")
 
+# --- Remove default top padding/margin ---
+st.markdown("""
+    <style>
+        .css-18e3th9 {padding-top: 0rem;}
+        .css-1d391kg {padding-top: 0rem;}
+    </style>
+""", unsafe_allow_html=True)
+
 # --- Black Balloons ---
 balloons_html = """
 <style>
@@ -52,7 +60,7 @@ st.markdown("""
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Gallery layout */
+/* Gallery container with equal-sized blocks */
 .gallery-container {
     display: flex;
     justify-content: center;
@@ -65,7 +73,11 @@ st.markdown("""
     border-radius: 15px;
     padding: 10px;
     text-align: center;
-    max-width: 300px;
+    width: 300px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 .gallery-frame:hover {
@@ -75,12 +87,14 @@ st.markdown("""
 .gallery-frame img {
     border-radius: 10px;
     width: 100%;
-    height: auto;
+    height: 70%;
+    object-fit: cover;
 }
 .gallery-caption {
-    margin-top: 8px;
-    font-size: 0.95rem;
-    color: black;  /* Keep text black */
+    margin-top: 10px;
+    font-size: 1rem;
+    color: black;  /* black text */
+    font-weight: bold;
 }
 
 /* Main message card */
@@ -99,6 +113,7 @@ st.markdown("""
 
 h1, h3 {
     color: black;
+    margin: 0;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -110,7 +125,7 @@ if os.path.exists(music_file):
         st.audio(f.read(), format="audio/mp3")
 
 # --- Title ---
-st.markdown("<h1 style='text-align:center;'>Happy Birthday, Kitso! </h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align:center; margin-top:10px;'>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align:center;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
 # --- Gallery Images Side by Side ---
@@ -128,7 +143,7 @@ for item in gallery_items:
         st.image(img, use_container_width=True)
         st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
-        time.sleep(0.5)
+        time.sleep(0.3)
     else:
         st.warning(f"Image not found: {item['img']}")
 st.markdown("</div>", unsafe_allow_html=True)
@@ -151,4 +166,4 @@ else:
     st.warning(f"Video not found: {video_file}")
 
 # --- Closing Line ---
-st.markdown("<h3 style='text-align:center;'> Here's to many more beautiful memories! </h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align:center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
