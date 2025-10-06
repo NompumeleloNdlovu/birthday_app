@@ -41,14 +41,11 @@ h3 {
     box-shadow: none;  /* Removed shadow */
 }
 
-/* Gallery container for horizontal layout */
 .gallery-container {
     display: flex;
     justify-content: center;
-    gap: 0px; /* We'll use border instead of gap */
 }
 
-/* Individual image frame with cream-white background and black separation */
 .gallery-frame {
     background-color: #fff8e7; 
     border-radius: 15px; 
@@ -67,16 +64,6 @@ h3 {
     box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
 }
 
-.gallery-frame img { 
-    width: 400px; 
-    height: 300px; 
-    object-fit: contain; 
-    border-radius: 10px; 
-    display: block; 
-    margin: auto; 
-    background-color: black; /* image padding inside frame */
-}
-
 .gallery-caption { 
     margin-top: 10px; 
     font-weight: bold; 
@@ -85,6 +72,15 @@ h3 {
 }
 </style>
 """, unsafe_allow_html=True)
+
+# --- Background music ---
+music_file = "music/song.mp3"
+if os.path.exists(music_file):
+    with open(music_file, "rb") as f:
+        audio_bytes = f.read()
+    st.audio(audio_bytes, format="audio/mp3", start_time=0)
+else:
+    st.warning("Music file not found!")
 
 # --- Title ---
 st.markdown("<h1>Happy Birthday Kitso</h1>", unsafe_allow_html=True)
@@ -100,27 +96,18 @@ gallery_items = [
 st.markdown("<div class='gallery-container'>", unsafe_allow_html=True)
 
 for i, item in enumerate(gallery_items):
-    if os.path.exists(item["img"]):
-        img = Image.open(item["img"])
-        # Fit full image into 400x300 with padding, preserve aspect ratio
-        img = ImageOps.contain(img, (400, 300), method=Image.Resampling.LANCZOS)
-        framed_img = Image.new("RGB", (400, 300), "#fff8e7")
-        framed_img.paste(img, ((400 - img.width)//2, (300 - img.height)//2))
-        
-        # Save temporary image for Streamlit display
-        temp_path = f"/tmp/temp_img_{i}.png"
-        framed_img.save(temp_path)
-
-        st.markdown(f"""
-        <div class='gallery-frame'>
-            <img src='{temp_path}' width='400' height='300'>
-            <div class='gallery-caption'>{item['msg']}</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        time.sleep(0.3)  # Sequential fade-in effect
-    else:
-        st.warning(f"Image not found: {item['img']}")
+    with st.container():
+        if os.path.exists(item["img"]):
+            img = Image.open(item["img"])
+            # Fit full image into 400x300 with black padding
+            img = ImageOps.contain(img, (400, 300), method=Image.Resampling.LANCZOS)
+            framed_img = Image.new("RGB", (400, 300), "#fff8e7")
+            framed_img.paste(img, ((400 - img.width)//2, (300 - img.height)//2))
+            st.image(framed_img, use_column_width=False)
+            st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
+            time.sleep(0.3)  # Sequential fade-in
+        else:
+            st.warning(f"Image not found: {item['img']}")
 
 st.markdown("</div>", unsafe_allow_html=True)
 
