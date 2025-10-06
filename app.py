@@ -1,5 +1,5 @@
 import streamlit as st
-from PIL import Image
+from PIL import Image, ImageOps
 import os
 
 # --- Page config ---
@@ -8,10 +8,23 @@ st.set_page_config(page_title="Happy Birthday!", page_icon="🎉", layout="cente
 # --- Custom CSS ---
 st.markdown("""
 <style>
-.stApp { background-color: #fff8e7; color: black; font-family: 'Cinzel', serif; }
+.stApp { 
+    background-color: #fff8e7;  /* Cream-white background */
+    color: black; 
+    font-family: 'Cinzel', serif; 
+}
 
-h1 { color: black; font-family: 'Cinzel Decorative', cursive; text-align: center; }
-h3 { color: black; font-family: 'Cinzel', serif; text-align: center; }
+h1 { 
+    color: black; 
+    font-family: 'Cinzel Decorative', cursive; 
+    text-align: center; 
+}
+
+h3 { 
+    color: black; 
+    font-family: 'Cinzel', serif; 
+    text-align: center; 
+}
 
 .main-message {
     background-color: #fdf3d9;
@@ -22,38 +35,38 @@ h3 { color: black; font-family: 'Cinzel', serif; text-align: center; }
     text-align: center;
     font-size: 1.2rem;
     line-height: 1.6;
-    color: black;
+    color: black;  /* Black text */
     box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     font-family: 'Cinzel', serif;
 }
 
 .gallery-frame {
-    background-color: black;
-    border-radius: 15px;
-    text-align: center;
-    padding: 10px;
-    transition: transform 0.3s, box-shadow 0.3s;
+    background-color: black; 
+    border-radius: 15px; 
+    text-align: center; 
+    padding: 10px; 
+    transition: transform 0.3s, box-shadow 0.3s; 
 }
 
-.gallery-frame:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+.gallery-frame:hover { 
+    transform: scale(1.05); 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
 }
 
-.gallery-frame img {
-    width: 300px;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 10px;
-    display: block;
-    margin: auto;
+.gallery-frame img { 
+    width: 300px; 
+    height: 250px; 
+    object-fit: cover; 
+    border-radius: 10px; 
+    display: block; 
+    margin: auto; 
 }
 
-.gallery-caption {
-    margin-top: 10px;
-    font-weight: bold;
-    color: gold;
-    font-family: 'Cinzel', serif;
+.gallery-caption { 
+    margin-top: 10px; 
+    font-weight: bold; 
+    color: black;  /* Black captions */
+    font-family: 'Cinzel', serif; 
 }
 </style>
 """, unsafe_allow_html=True)
@@ -73,7 +86,10 @@ cols = st.columns(len(gallery_items))
 for i, item in enumerate(gallery_items):
     with cols[i]:
         if os.path.exists(item["img"]):
-            st.image(item["img"], use_container_width=False, width=300)
+            # Open image and crop/resize
+            img = Image.open(item["img"])
+            img = ImageOps.fit(img, (300, 250), Image.ANTIALIAS, centering=(0.5, 0.5))
+            st.image(img, use_container_width=False)
             st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
         else:
             st.warning(f"Image not found: {item['img']}")
@@ -97,4 +113,3 @@ else:
 
 # --- Closing line ---
 st.markdown("<h3 style='text-align:center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
-
