@@ -53,6 +53,11 @@ h3 {
     to {opacity: 1; transform: translateY(0);}
 }
 
+@keyframes captionFadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
 .gallery-frame {
     background-color: #fff8e7;  /* Cream-white background */
     border-radius: 15px; 
@@ -86,11 +91,13 @@ h3 {
     font-weight: bold; 
     color: black;  
     font-family: 'Cinzel', serif; 
-    opacity: 1;  
     background-color: rgba(255, 248, 231, 0.8); /* semi-transparent cream */
     border-radius: 8px;
     padding: 5px 10px;
     display: inline-block;
+    opacity: 0;  /* start hidden */
+    animation: captionFadeIn 0.8s forwards;
+    animation-delay: 0.5s;  /* appears slightly after the image */
 }
 </style>
 """, unsafe_allow_html=True)
