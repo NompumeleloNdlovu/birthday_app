@@ -1,35 +1,14 @@
 import streamlit as st
 from PIL import Image
 import os
+import streamlit.components.v1 as components
 
 # --- Page config ---
 st.set_page_config(page_title="Happy Birthday!", page_icon="🎉", layout="centered")
 
-# --- Custom CSS for background, text, animations, and realistic gold confetti ---
-st.markdown(
-    """
-    <style>
-    .stApp {
-        background-color: white;
-        color: black;
-        overflow-x: hidden;
-    }
-
-    .gallery-caption {
-        margin-top: 5px;
-        font-size: 0.95rem;
-        color: #333;
-    }
-
-    .main-message {
-        text-align: center;
-        margin: 40px 20px;
-        font-size: 1.2rem;
-        line-height: 1.6;
-        color: #000;
-    }
-
-    /* Realistic gold confetti */
+# --- Realistic Gold Confetti using components.html ---
+confetti_html = """
+<style>
     .confetti {
         position: fixed;
         top: 0;
@@ -43,45 +22,34 @@ st.markdown(
         position: absolute;
         background-color: gold;
         opacity: 0.9;
-        transform: rotate(0deg);
         border-radius: 2px;
     }
     @keyframes fall {
         0% { transform: translateY(0) rotate(0deg); opacity: 1; }
         100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
-    </style>
+</style>
+<div class="confetti" id="confetti"></div>
+<script>
+const confettiContainer = document.getElementById('confetti');
+const confettiCount = 120;
+for (let i = 0; i < confettiCount; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti-piece';
+    const size = Math.random() * 8 + 4;
+    confetti.style.width = size + 'px';
+    confetti.style.height = size + 'px';
+    confetti.style.left = Math.random() * 100 + 'vw';
+    const duration = 3 + Math.random() * 3;
+    const delay = Math.random() * 5;
+    confetti.style.animation = `fall ${duration}s linear ${delay}s infinite`;
+    confettiContainer.appendChild(confetti);
+}
+</script>
+"""
 
-    <div class="confetti" id="confetti"></div>
-
-    <script>
-    const confettiContainer = document.getElementById('confetti');
-    const confettiCount = 120;
-
-    for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti-piece';
-
-        // Random size
-        const size = Math.random() * 8 + 4; // 4px to 12px
-        confetti.style.width = size + 'px';
-        confetti.style.height = size + 'px';
-
-        // Random horizontal position
-        confetti.style.left = Math.random() * 100 + 'vw';
-
-        // Random animation duration and delay
-        const duration = 3 + Math.random() * 3; // 3s to 6s
-        const delay = Math.random() * 5; // delay start
-        confetti.style.animation = `fall ${duration}s linear ${delay}s infinite`;
-
-        // Append to container
-        confettiContainer.appendChild(confetti);
-    }
-    </script>
-    """,
-    unsafe_allow_html=True
-)
+# Inject HTML + JS
+components.html(confetti_html, height=0, width=0)
 
 # --- Background Music ---
 music_file = "music/song.mp3"
@@ -109,14 +77,14 @@ for col, item in zip(cols, gallery_items):
     msg = item["message"]
     if os.path.exists(img_path):
         image = Image.open(img_path)
-        col.image(image, use_column_width=True)
-        col.markdown(f"<div class='gallery-caption'>{msg}</div>", unsafe_allow_html=True)
+        col.image(image, use_container_width=True)
+        col.markdown(f"<div style='text-align:center; margin-top:5px;'>{msg}</div>", unsafe_allow_html=True)
     else:
         col.warning(f"Image not found: {img_path}")
 
 # --- Central Main Message ---
 main_message = """
-<p class="main-message">
+<p style='text-align:center; margin:40px 20px; font-size:1.2rem; line-height:1.6; color:#000;'>
 May the light of the Lord shine upon you and grant you happiness on this birthday and for many years to come.<br><br>
 “Delight yourself in the Lord, and He will give you the desires of your heart.” —Psalm 37:4<br>
 “The Lord will guide you always; He will satisfy your needs in a sun-scorched land and will strengthen your frame.” —Isaiah 58:11
@@ -124,14 +92,17 @@ May the light of the Lord shine upon you and grant you happiness on this birthda
 """
 st.markdown(main_message, unsafe_allow_html=True)
 
-# --- Videos Side by Side ---
-video_files = ["videos/video1.mp4", "videos/video2.mp4"]
-cols_videos = st.columns(len(video_files))
-for col, vid in zip(cols_videos, video_files):
-    if os.path.exists(vid):
-        col.video(vid, format="video/mp4", start_time=0)
-    else:
-        col.warning(f"Video not found: {vid}")
+# --- Single Video with Custom Message ---
+video_file = "videos/video1.mp4"
+if os.path.exists(video_file):
+    st.video(video_file, format="video/mp4", start_time=0)
+    st.markdown(
+        "<h3 style='text-align: center; color:#333;'>CAN'T WAIT TO SEE YOU REACH EVEN GREATER HEIGHTS, PROUD OF YOU AND ALL YOUR ACHIEVEMENTS, KEEP THRIVING</h3>",
+        unsafe_allow_html=True
+    )
+else:
+    st.warning(f"Video not found: {video_file}")
+
 # --- Closing line ---
-st.markdown("<h3 style='text-align: center;'> Here's to many more beautiful memories! </h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center;'>Here's to many more beautiful memories! </h3>", unsafe_allow_html=True)
 
