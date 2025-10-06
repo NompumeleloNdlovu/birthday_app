@@ -1,55 +1,75 @@
 import streamlit as st
 from PIL import Image
 import os
+import time
 import streamlit.components.v1 as components
 
 # --- Page config ---
 st.set_page_config(page_title="Happy Birthday!", page_icon="🎉", layout="centered")
 
-# --- Realistic Gold Confetti using components.html ---
-confetti_html = """
+# --- Black Balloons with CSS/HTML ---
+balloons_html = """
 <style>
-    .confetti {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 0;
-        pointer-events: none;
-        z-index: 9999;
-    }
-    .confetti-piece {
-        position: absolute;
-        background-color: gold;
-        opacity: 0.9;
-        border-radius: 2px;
-    }
-    @keyframes fall {
-        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-    }
+.balloon {
+  position: absolute;
+  bottom: -100px;
+  width: 40px;
+  height: 60px;
+  background-color: black;
+  border-radius: 50% 50% 50% 50%;
+  opacity: 0.9;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-110vh) rotate(360deg); }
+}
 </style>
-<div class="confetti" id="confetti"></div>
+
+<div id="balloons"></div>
 <script>
-const confettiContainer = document.getElementById('confetti');
-const confettiCount = 120;
-for (let i = 0; i < confettiCount; i++) {
-    const confetti = document.createElement('div');
-    confetti.className = 'confetti-piece';
-    const size = Math.random() * 8 + 4;
-    confetti.style.width = size + 'px';
-    confetti.style.height = size + 'px';
-    confetti.style.left = Math.random() * 100 + 'vw';
-    const duration = 3 + Math.random() * 3;
-    const delay = Math.random() * 5;
-    confetti.style.animation = `fall ${duration}s linear ${delay}s infinite`;
-    confettiContainer.appendChild(confetti);
+const balloonsContainer = document.getElementById('balloons');
+const balloonCount = 30; // Number of balloons
+
+for (let i = 0; i < balloonCount; i++) {
+    const balloon = document.createElement('div');
+    balloon.className = 'balloon';
+    balloon.style.left = Math.random() * 100 + 'vw';  // random horizontal position
+    balloon.style.width = (20 + Math.random() * 30) + 'px';  // random width
+    balloon.style.height = (30 + Math.random() * 40) + 'px'; // random height
+    balloon.style.animationDuration = (5 + Math.random() * 5) + 's'; // random speed
+    balloon.style.animationDelay = Math.random() * 5 + 's';
+    balloonsContainer.appendChild(balloon);
 }
 </script>
 """
+components.html(balloons_html, height=0, width=0)
 
-# Inject HTML + JS
-components.html(confetti_html, height=0, width=0)
+# --- Custom CSS for background and text ---
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #fff8e7;  /* Cream white background */
+        color: black;
+    }
+    .gallery-caption {
+        margin-top: 5px;
+        font-size: 0.95rem;
+        color: #000;
+    }
+    .main-message {
+        text-align: center;
+        margin: 40px 20px;
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: #000;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # --- Background Music ---
 music_file = "music/song.mp3"
@@ -61,30 +81,34 @@ else:
     st.warning("🎵 Music file not found!")
 
 # --- Title ---
-st.markdown("<h1 style='text-align: center; color: #ff4b4b;'> Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: black;'>Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color:black;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
-# --- Gallery Images + Messages Side by Side ---
+# --- Gallery Images + Messages Sequentially ---
 gallery_items = [
     {"img": "images/IMG-20251006-WA0005.jpg", "message": "They say there’s no day like the present. So, cherish the day."},
     {"img": "images/IMG-20251006-WA0006.jpg", "message": "May God continue to keep you in His graces and bless you abundantly. Wishing you a happy and bountiful birthday!"},
     {"img": "images/IMG-20251006-WA0007.jpg", "message": "Wishing you divine peace and happiness today and throughout your life."}
 ]
 
-cols = st.columns(len(gallery_items))
-for col, item in zip(cols, gallery_items):
+st.markdown("<div style='display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;'>", unsafe_allow_html=True)
+placeholders = [st.empty() for _ in gallery_items]
+
+for placeholder, item in zip(placeholders, gallery_items):
     img_path = item["img"]
     msg = item["message"]
     if os.path.exists(img_path):
         image = Image.open(img_path)
-        col.image(image, use_container_width=True)
-        col.markdown(f"<div style='text-align:center; margin-top:5px;'>{msg}</div>", unsafe_allow_html=True)
+        placeholder.image(image, use_container_width=True)
+        placeholder.markdown(f"<div class='gallery-caption'>{msg}</div>", unsafe_allow_html=True)
+        time.sleep(1)  # 1-second delay between images
     else:
-        col.warning(f"Image not found: {img_path}")
+        placeholder.warning(f"Image not found: {img_path}")
+st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Central Main Message ---
 main_message = """
-<p style='text-align:center; margin:40px 20px; font-size:1.2rem; line-height:1.6; color:#000;'>
+<p class="main-message">
 May the light of the Lord shine upon you and grant you happiness on this birthday and for many years to come.<br><br>
 “Delight yourself in the Lord, and He will give you the desires of your heart.” —Psalm 37:4<br>
 “The Lord will guide you always; He will satisfy your needs in a sun-scorched land and will strengthen your frame.” —Isaiah 58:11
@@ -97,12 +121,12 @@ video_file = "videos/video1.mp4"
 if os.path.exists(video_file):
     st.video(video_file, format="video/mp4", start_time=0)
     st.markdown(
-        "<h3 style='text-align: center; color:#333;'>CAN'T WAIT TO SEE YOU REACH EVEN GREATER HEIGHTS, PROUD OF YOU AND ALL YOUR ACHIEVEMENTS, KEEP THRIVING</h3>",
+        "<h3 style='text-align: center; color:black;'>CAN'T WAIT TO SEE YOU REACH EVEN GREATER HEIGHTS, PROUD OF YOU AND ALL YOUR ACHIEVEMENTS, KEEP THRIVING</h3>",
         unsafe_allow_html=True
     )
 else:
     st.warning(f"Video not found: {video_file}")
 
 # --- Closing line ---
-st.markdown("<h3 style='text-align: center;'>Here's to many more beautiful memories! </h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color:black;'> Here's to many more beautiful memories! </h3>", unsafe_allow_html=True)
 
