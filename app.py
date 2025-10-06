@@ -36,8 +36,8 @@ h3 {
     font-size: 1.2rem;
     line-height: 1.6;
     color: black;  /* Black text */
-    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     font-family: 'Cinzel', serif;
+    /* Removed box-shadow to remove frame */
 }
 
 .gallery-frame {
@@ -54,8 +54,8 @@ h3 {
 }
 
 .gallery-frame img { 
-    width: 300px; 
-    height: 250px; 
+    width: 350px; 
+    height: 300px; 
     object-fit: cover; 
     border-radius: 10px; 
     display: block; 
@@ -88,7 +88,7 @@ for i, item in enumerate(gallery_items):
         if os.path.exists(item["img"]):
             # Open image and crop/resize (Pillow 10+ compatible)
             img = Image.open(item["img"])
-            img = ImageOps.fit(img, (300, 250), method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
+            img = ImageOps.fit(img, (350, 300), method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
             st.image(img, use_container_width=False)
             st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
         else:
