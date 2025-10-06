@@ -1,5 +1,5 @@
 import streamlit as st
-from PIL import Image, ImageOps, ImageDraw
+from PIL import Image, ImageOps
 import os
 import time
 
@@ -28,8 +28,8 @@ h3 {
 }
 
 .main-message {
-    background-color: #fdf3d9;
-    border-radius: 20px;
+    background-color: #fff8e7; /* Same as background */
+    border-radius: 0px; /* No frame */
     padding: 25px;
     margin: 40px auto;
     max-width: 700px;
@@ -38,11 +38,11 @@ h3 {
     line-height: 1.6;
     color: black;  /* Black text */
     font-family: 'Cinzel', serif;
-    box-shadow: none;  /* Removed box shadow */
+    box-shadow: none;  /* Removed shadow */
 }
 
 .gallery-frame {
-    background-color: black; 
+    background-color: #fff8e7; /* Cream-white frame */
     border-radius: 15px; 
     text-align: center; 
     padding: 10px; 
@@ -51,7 +51,7 @@ h3 {
 
 .gallery-frame:hover { 
     transform: scale(1.05); 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
 }
 
 .gallery-frame img { 
@@ -61,7 +61,7 @@ h3 {
     border-radius: 10px; 
     display: block; 
     margin: auto; 
-    background-color: black; /* padding for images to keep frame */
+    background-color: black; /* image padding inside frame */
 }
 
 .gallery-caption { 
@@ -84,7 +84,6 @@ gallery_items = [
     {"img":"images/IMG-20251006-WA0007.jpg","msg":"Wishing you divine peace and happiness today and throughout your life."}
 ]
 
-# Sequential fade-in
 cols = st.columns(len(gallery_items))
 for i, item in enumerate(gallery_items):
     with cols[i]:
@@ -92,8 +91,8 @@ for i, item in enumerate(gallery_items):
             img = Image.open(item["img"])
             # Fit full image into 400x300 with padding, preserve aspect ratio
             img = ImageOps.contain(img, (400, 300), method=Image.Resampling.LANCZOS)
-            # Create black background frame
-            framed_img = Image.new("RGB", (400, 300), "black")
+            # Create cream-white frame
+            framed_img = Image.new("RGB", (400, 300), "#fff8e7")
             framed_img.paste(img, ((400 - img.width)//2, (300 - img.height)//2))
             st.image(framed_img, use_container_width=False)
             st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
