@@ -7,36 +7,34 @@ import streamlit.components.v1 as components
 # --- Page config ---
 st.set_page_config(page_title="Happy Birthday Kitso", layout="centered")
 
-# --- Confetti effect at the start ---
+# --- Confetti effect at the start (5 seconds) ---
 components.html("""
+<div id="confetti-holder"></div>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <script>
-  window.onload = () => {
-    var duration = 3000; // 3 seconds
+  function launchConfetti() {
+    var duration = 5000; // 5 seconds
     var animationEnd = Date.now() + duration;
     var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
 
-    function randomInRange(min, max) {
-      return Math.random() * (max - min) + min;
-    }
-
     var interval = setInterval(function() {
       var timeLeft = animationEnd - Date.now();
-
       if (timeLeft <= 0) {
         clearInterval(interval);
         return;
       }
-
       var particleCount = 50 * (timeLeft / duration);
       confetti(Object.assign({}, defaults, {
         particleCount,
-        origin: { x: randomInRange(0, 1), y: Math.random() - 0.2 }
+        origin: { x: Math.random(), y: Math.random() - 0.2 }
       }));
     }, 250);
   }
+
+  // Run confetti shortly after component loads
+  setTimeout(launchConfetti, 100);
 </script>
-""", height=0)
+""", height=50)
 
 # --- Custom CSS ---
 st.markdown("""
