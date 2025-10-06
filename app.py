@@ -47,7 +47,7 @@ h3 {
 }
 
 .gallery-frame {
-    background-color: #fff8e7; 
+    background-color: black;  /* Frame back to black */
     border-radius: 15px; 
     text-align: center; 
     padding: 10px; 
@@ -98,12 +98,12 @@ st.markdown("<div class='gallery-container'>", unsafe_allow_html=True)
 for i, item in enumerate(gallery_items):
     if os.path.exists(item["img"]):
         img = Image.open(item["img"])
-        # Fit full image into 400x300 with black padding
+        # Fit full image into 400x300 with padding
         img = ImageOps.contain(img, (400, 300), method=Image.Resampling.LANCZOS)
-        framed_img = Image.new("RGB", (400, 300), "#fff8e7")
+        framed_img = Image.new("RGB", (400, 300), "black")  # Black frame
         framed_img.paste(img, ((400 - img.width)//2, (300 - img.height)//2))
         
-        # Display image with updated parameter
+        # Display image
         st.image(framed_img, use_container_width=False)
         st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
         time.sleep(0.3)  # Sequential fade-in
