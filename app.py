@@ -43,11 +43,11 @@ for (let i=0; i<30; i++){
 """
 components.html(balloons_html, height=600, width=0)
 
-# --- Custom CSS for Cream Background + Black Text + Frames ---
+# --- Custom CSS ---
 st.markdown("""
 <style>
 .stApp {
-    background-color: #fff8e7;  /* Cream white */
+    background-color: #fff8e7;  /* Cream-white background */
     color: black;
 }
 .main-message {
@@ -55,22 +55,25 @@ st.markdown("""
     margin: 40px 20px;
     font-size: 1.2rem;
     line-height: 1.6;
+    color: black;
 }
 .gallery-frame {
     background-color: black;
     border-radius: 15px;
     padding: 15px;
     margin: 20px auto;
-    max-width: 500px;
+    max-width: 450px;
     text-align: center;
 }
 .gallery-frame img {
     border-radius: 10px;
+    max-width: 100%;
+    height: auto;
 }
 .gallery-caption {
     margin-top: 10px;
-    font-size: 1rem;
-    color: #FFD700;  /* Gold text for captions */
+    font-size: 0.95rem;
+    color: black;  /* Black captions */
 }
 h1, h3 {
     color: black;
@@ -85,7 +88,7 @@ if os.path.exists(music_file):
         st.audio(f.read(), format="audio/mp3")
 
 # --- Title ---
-st.markdown("<h1 style='text-align:center;'> Happy Birthday, Kitso! </h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align:center;'>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align:center;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
 # --- Gallery Images Listed Vertically ---
@@ -102,7 +105,7 @@ for item in gallery_items:
         st.image(img, use_container_width=True)
         st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
-        time.sleep(1)  # sequential appearance
+        time.sleep(1)  # Sequential appearance
     else:
         st.warning(f"Image not found: {item['img']}")
 
@@ -124,5 +127,4 @@ else:
     st.warning(f"Video not found: {video_file}")
 
 # --- Closing Line ---
-st.markdown("<h3 style='text-align:center;'> Here's to many more beautiful memories! </h3>", unsafe_allow_html=True)
-
+st.markdown("<h3 style='text-align:center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
