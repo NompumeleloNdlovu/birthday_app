@@ -7,15 +7,25 @@ import streamlit.components.v1 as components
 # --- Page config ---
 st.set_page_config(page_title="Happy Birthday Kitso", layout="centered")
 
-# --- Full-page Black & Gold confetti (10 seconds) ---
+# --- Full-page Black & Gold Confetti (10 seconds) ---
 components.html("""
-<canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <script>
-const myCanvas = document.getElementById('confetti-canvas');
-const myConfetti = confetti.create(myCanvas, { resize: true, useWorker: true });
-
 function launchFullPageConfetti() {
+    // Create a full-page canvas
+    const canvas = document.createElement('canvas');
+    canvas.id = 'confetti-canvas';
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = 9999;
+    document.body.appendChild(canvas);
+
+    const myConfetti = confetti.create(canvas, { resize: true, useWorker: true });
+
     const duration = 10000; // 10 seconds
     const animationEnd = Date.now() + duration;
 
@@ -27,23 +37,25 @@ function launchFullPageConfetti() {
         }
 
         const particleCount = 120 * (timeLeft / duration);
-
         myConfetti({
             particleCount: particleCount,
             startVelocity: 50,
             spread: 360,
             ticks: 60,
             gravity: 0.5,
-            colors: ['#FFD700', '#FFC700', '#FFB700', '#000000'], // gold + black
+            colors: ['#FFD700','#FFC700','#FFB700','#000000'], // gold + black
             origin: { x: Math.random(), y: Math.random() - 0.2 },
             scalar: Math.random() * 0.8 + 0.6
         });
     }, 200);
 }
 
-setTimeout(launchFullPageConfetti, 100);
+// Run confetti shortly after the page loads
+window.addEventListener('load', () => {
+    setTimeout(launchFullPageConfetti, 100);
+});
 </script>
-""", height=0)
+""", height=1)
 
 # --- Custom CSS ---
 st.markdown("""
