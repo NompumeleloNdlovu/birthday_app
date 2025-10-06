@@ -33,28 +33,28 @@ st.markdown(
 
 # 🎂 Subtext
 st.write("## Wishing you an amazing day filled with love, laughter, and joy!")
-
 # 🖼 Main Image
-main_image = Image.open("images/pic1.jpg")  # Change image name if needed
+main_image = Image.open("images/IMG-20251006-WA0005.jpg")
 st.image(main_image, caption="Birthday Star", use_column_width=True)
 
 st.write("---")
 
 # 📸 Gallery Section
-st.write("### Fave :")
+st.write("### Some of our favorite moments:")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    img1 = Image.open("images/pic2.jpg")
+    img1 = Image.open("images/IMG-20251006-WA0006.jpg")
     st.image(img1, use_column_width=True)
 
 with col2:
-    img2 = Image.open("images/pic3.png")
+    img2 = Image.open("images/IMG-20251006-WA0007.jpg")
     st.image(img2, use_column_width=True)
 
 with col3:
-    img3 = Image.open("images/pic1.jpg")  # Or add another image
+    img3 = Image.open("images/IMG-20251006-WA0005.jpg")  # reuse main image
     st.image(img3, use_column_width=True)
+
 
 st.write("---")
 
