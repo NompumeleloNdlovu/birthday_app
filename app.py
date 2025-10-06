@@ -96,18 +96,19 @@ gallery_items = [
 st.markdown("<div class='gallery-container'>", unsafe_allow_html=True)
 
 for i, item in enumerate(gallery_items):
-    with st.container():
-        if os.path.exists(item["img"]):
-            img = Image.open(item["img"])
-            # Fit full image into 400x300 with black padding
-            img = ImageOps.contain(img, (400, 300), method=Image.Resampling.LANCZOS)
-            framed_img = Image.new("RGB", (400, 300), "#fff8e7")
-            framed_img.paste(img, ((400 - img.width)//2, (300 - img.height)//2))
-            st.image(framed_img, use_column_width=False)
-            st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
-            time.sleep(0.3)  # Sequential fade-in
-        else:
-            st.warning(f"Image not found: {item['img']}")
+    if os.path.exists(item["img"]):
+        img = Image.open(item["img"])
+        # Fit full image into 400x300 with black padding
+        img = ImageOps.contain(img, (400, 300), method=Image.Resampling.LANCZOS)
+        framed_img = Image.new("RGB", (400, 300), "#fff8e7")
+        framed_img.paste(img, ((400 - img.width)//2, (300 - img.height)//2))
+        
+        # Display image with updated parameter
+        st.image(framed_img, use_container_width=False)
+        st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
+        time.sleep(0.3)  # Sequential fade-in
+    else:
+        st.warning(f"Image not found: {item['img']}")
 
 st.markdown("</div>", unsafe_allow_html=True)
 
