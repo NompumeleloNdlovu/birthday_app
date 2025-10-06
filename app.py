@@ -1,8 +1,7 @@
 import streamlit as st
-from PIL import Image, ImageOps
+from PIL import Image
 import os
 import base64
-import time
 
 # --- Page config ---
 st.set_page_config(page_title="Happy Birthday Kitso", layout="centered")
@@ -29,8 +28,8 @@ h3 {
 }
 
 .main-message {
-    background-color: #fff8e7; /* Same as background */
-    border-radius: 0px; /* No frame */
+    background-color: #fff8e7; 
+    border-radius: 0px; 
     padding: 25px;
     margin: 40px auto;
     max-width: 700px;
@@ -45,6 +44,13 @@ h3 {
 .gallery-container {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
 }
 
 .gallery-frame {
@@ -55,7 +61,13 @@ h3 {
     transition: transform 0.3s, box-shadow 0.3s;
     border-right: 2px solid black;
     flex: 0 0 auto;
+    opacity: 0;  
+    animation: fadeIn 0.8s forwards;
 }
+
+.gallery-frame:nth-child(1) { animation-delay: 0s; }
+.gallery-frame:nth-child(2) { animation-delay: 0.3s; }
+.gallery-frame:nth-child(3) { animation-delay: 0.6s; }
 
 .gallery-frame:last-child {
     border-right: none;
@@ -81,6 +93,7 @@ h3 {
     font-weight: bold; 
     color: black;  
     font-family: 'Cinzel', serif; 
+    opacity: 1;  
 }
 </style>
 """, unsafe_allow_html=True)
@@ -111,7 +124,7 @@ def image_to_base64(img_path):
         data = f.read()
     return base64.b64encode(data).decode("utf-8")
 
-# --- Display gallery horizontally ---
+# --- Display gallery horizontally with captions ---
 st.markdown("<div class='gallery-container'>", unsafe_allow_html=True)
 for item in gallery_items:
     if os.path.exists(item["img"]):
@@ -122,7 +135,6 @@ for item in gallery_items:
             <div class='gallery-caption'>{item['msg']}</div>
         </div>
         """, unsafe_allow_html=True)
-        time.sleep(0.3)  # Simulated fade-in
     else:
         st.warning(f"Image not found: {item['img']}")
 st.markdown("</div>", unsafe_allow_html=True)
