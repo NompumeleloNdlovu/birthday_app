@@ -41,12 +41,25 @@ h3 {
     box-shadow: none;  /* Removed shadow */
 }
 
+/* Gallery container for horizontal layout */
+.gallery-container {
+    display: flex;
+    justify-content: center;
+    gap: 0px; /* We'll use border instead of gap */
+}
+
+/* Individual image frame with cream-white background and black separation */
 .gallery-frame {
-    background-color: #fff8e7; /* Cream-white frame */
+    background-color: #fff8e7; 
     border-radius: 15px; 
     text-align: center; 
     padding: 10px; 
-    transition: transform 0.3s, box-shadow 0.3s; 
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-right: 2px solid black; /* Black line to separate images */
+}
+
+.gallery-frame:last-child {
+    border-right: none; /* No border on last image */
 }
 
 .gallery-frame:hover { 
@@ -84,21 +97,32 @@ gallery_items = [
     {"img":"images/IMG-20251006-WA0007.jpg","msg":"Wishing you divine peace and happiness today and throughout your life."}
 ]
 
-cols = st.columns(len(gallery_items))
+st.markdown("<div class='gallery-container'>", unsafe_allow_html=True)
+
 for i, item in enumerate(gallery_items):
-    with cols[i]:
-        if os.path.exists(item["img"]):
-            img = Image.open(item["img"])
-            # Fit full image into 400x300 with padding, preserve aspect ratio
-            img = ImageOps.contain(img, (400, 300), method=Image.Resampling.LANCZOS)
-            # Create cream-white frame
-            framed_img = Image.new("RGB", (400, 300), "#fff8e7")
-            framed_img.paste(img, ((400 - img.width)//2, (300 - img.height)//2))
-            st.image(framed_img, use_container_width=False)
-            st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
-            time.sleep(0.3)  # small delay for sequential appearance
-        else:
-            st.warning(f"Image not found: {item['img']}")
+    if os.path.exists(item["img"]):
+        img = Image.open(item["img"])
+        # Fit full image into 400x300 with padding, preserve aspect ratio
+        img = ImageOps.contain(img, (400, 300), method=Image.Resampling.LANCZOS)
+        framed_img = Image.new("RGB", (400, 300), "#fff8e7")
+        framed_img.paste(img, ((400 - img.width)//2, (300 - img.height)//2))
+        
+        # Save temporary image for Streamlit display
+        temp_path = f"/tmp/temp_img_{i}.png"
+        framed_img.save(temp_path)
+
+        st.markdown(f"""
+        <div class='gallery-frame'>
+            <img src='{temp_path}' width='400' height='300'>
+            <div class='gallery-caption'>{item['msg']}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        time.sleep(0.3)  # Sequential fade-in effect
+    else:
+        st.warning(f"Image not found: {item['img']}")
+
+st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Main message ---
 st.markdown("""
