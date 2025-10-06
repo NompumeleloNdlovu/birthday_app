@@ -1,6 +1,7 @@
 import streamlit as st
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageDraw
 import os
+import time
 
 # --- Page config ---
 st.set_page_config(page_title="Happy Birthday Kitso", page_icon=None, layout="centered")
@@ -56,10 +57,11 @@ h3 {
 .gallery-frame img { 
     width: 400px; 
     height: 300px; 
-    object-fit: cover; 
+    object-fit: contain; 
     border-radius: 10px; 
     display: block; 
     margin: auto; 
+    background-color: black; /* padding for images to keep frame */
 }
 
 .gallery-caption { 
@@ -82,15 +84,20 @@ gallery_items = [
     {"img":"images/IMG-20251006-WA0007.jpg","msg":"Wishing you divine peace and happiness today and throughout your life."}
 ]
 
+# Sequential fade-in
 cols = st.columns(len(gallery_items))
 for i, item in enumerate(gallery_items):
     with cols[i]:
         if os.path.exists(item["img"]):
             img = Image.open(item["img"])
-            # Crop mostly from top, show some bottom
-            img = ImageOps.fit(img, (400, 300), method=Image.Resampling.LANCZOS, centering=(0.5, 0.2))
-            st.image(img, use_container_width=False)
+            # Fit full image into 400x300 with padding, preserve aspect ratio
+            img = ImageOps.contain(img, (400, 300), method=Image.Resampling.LANCZOS)
+            # Create black background frame
+            framed_img = Image.new("RGB", (400, 300), "black")
+            framed_img.paste(img, ((400 - img.width)//2, (300 - img.height)//2))
+            st.image(framed_img, use_container_width=False)
             st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
+            time.sleep(0.3)  # small delay for sequential appearance
         else:
             st.warning(f"Image not found: {item['img']}")
 
