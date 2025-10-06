@@ -1,5 +1,4 @@
 import streamlit as st
-from PIL import Image
 import os
 
 # --- Page config ---
@@ -22,31 +21,24 @@ st.markdown("""
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Horizontal scrollable gallery */
+/* Horizontal gallery with black frames */
 .gallery-container {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding: 10px 0;
     gap: 20px;
+    padding: 10px 0;
     justify-content: flex-start;
-    margin-bottom: 30px;
 }
 
 .gallery-frame {
     background-color: black;
     border-radius: 15px;
+    flex: 0 0 auto;
     width: 300px;
-    flex: 0 0 auto;  /* Prevent shrinking */
     text-align: center;
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.gallery-frame:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
 .gallery-frame img {
@@ -88,23 +80,27 @@ h1, h3 {
 st.markdown("<h1 style='text-align:center;'>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align:center;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
-# --- Gallery images horizontally ---
+# --- Gallery images horizontally using HTML ---
 gallery_items = [
     {"img":"images/IMG-20251006-WA0005.jpg","msg":"They say there’s no day like the present. So, cherish the day."},
     {"img":"images/IMG-20251006-WA0006.jpg","msg":"May God continue to keep you in His graces and bless you abundantly. Wishing you a happy and bountiful birthday!"},
     {"img":"images/IMG-20251006-WA0007.jpg","msg":"Wishing you divine peace and happiness today and throughout your life."}
 ]
 
-st.markdown("<div class='gallery-container'>", unsafe_allow_html=True)
+gallery_html = "<div class='gallery-container'>"
 for item in gallery_items:
     if os.path.exists(item["img"]):
-        st.markdown("<div class='gallery-frame'>", unsafe_allow_html=True)
-        st.image(item["img"])
-        st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+        gallery_html += f"""
+        <div class='gallery-frame'>
+            <img src='{item["img"]}'>
+            <div class='gallery-caption'>{item["msg"]}</div>
+        </div>
+        """
     else:
-        st.warning(f"Image not found: {item['img']}")
-st.markdown("</div>", unsafe_allow_html=True)
+        gallery_html += f"<div class='gallery-frame'><div class='gallery-caption'>Image not found: {item['img']}</div></div>"
+gallery_html += "</div>"
+
+st.markdown(gallery_html, unsafe_allow_html=True)
 
 # --- Main message ---
 st.markdown("""
@@ -125,3 +121,4 @@ else:
 
 # --- Closing line ---
 st.markdown("<h3 style='text-align:center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
+
