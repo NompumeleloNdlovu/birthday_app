@@ -5,24 +5,21 @@ import os
 # --- Page config ---
 st.set_page_config(page_title="Happy Birthday!", page_icon="🎉", layout="centered")
 
-# --- Custom CSS for background, text, and image animations ---
+# --- Custom CSS for background, text, and animations ---
 st.markdown(
     """
     <style>
-    /* Page background and text */
     .stApp {
         background-color: white;
         color: black;
     }
 
-    /* Image frame with pop-out animation */
     .gallery-frame {
         text-align: center;
         padding: 10px;
         margin-bottom: 20px;
         transition: transform 0.3s, box-shadow 0.3s;
         border-radius: 15px;
-        display: inline-block;
     }
 
     .gallery-frame:hover {
@@ -30,32 +27,18 @@ st.markdown(
         box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
 
-    /* Image inside frame */
-    .gallery-img {
-        width: 100%;
-        border-radius: 10px;
-    }
-
-    /* Image caption */
     .gallery-caption {
         margin-top: 10px;
         font-size: 1rem;
         color: #333;
     }
 
-    /* Centered main message */
     .main-message {
         text-align: center;
         margin: 40px 20px;
         font-size: 1.2rem;
         line-height: 1.6;
         color: #000;
-    }
-
-    /* Video container */
-    .video-container {
-        text-align: center;
-        margin-bottom: 30px;
     }
     </style>
     """,
@@ -73,26 +56,17 @@ else:
 
 # --- Realistic Gold Confetti ---
 for _ in range(3):
-    st.balloons()  # multiple batches to simulate gold
+    st.balloons()
 
 # --- Title ---
-st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>🎉 Happy Birthday, Sarah! 🎉</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
 # --- Gallery Images + Messages ---
 gallery_items = [
-    {
-        "img": "images/IMG-20251006-WA0005.jpg",
-        "message": "They say there’s no day like the present. So, cherish the day."
-    },
-    {
-        "img": "images/IMG-20251006-WA0006.jpg",
-        "message": "May God continue to keep you in His graces and bless you abundantly. Wishing you a happy and bountiful birthday!"
-    },
-    {
-        "img": "images/IMG-20251006-WA0007.jpg",
-        "message": "Wishing you divine peace and happiness today and throughout your life."
-    }
+    {"img": "images/IMG-20251006-WA0005.jpg", "message": "They say there’s no day like the present. So, cherish the day."},
+    {"img": "images/IMG-20251006-WA0006.jpg", "message": "May God continue to keep you in His graces and bless you abundantly. Wishing you a happy and bountiful birthday!"},
+    {"img": "images/IMG-20251006-WA0007.jpg", "message": "Wishing you divine peace and happiness today and throughout your life."}
 ]
 
 st.write("---")
@@ -103,15 +77,10 @@ for col, item in zip(cols, gallery_items):
     img_path = item["img"]
     msg = item["message"]
     if os.path.exists(img_path):
-        col.markdown(
-            f"""
-            <div class="gallery-frame">
-                <img src="{img_path}" class="gallery-img">
-                <div class="gallery-caption">{msg}</div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+        img = Image.open(img_path)
+        col.markdown(f"<div class='gallery-frame'>", unsafe_allow_html=True)
+        col.image(img, use_container_width=True)
+        col.markdown(f"<div class='gallery-caption'>{msg}</div></div>", unsafe_allow_html=True)
     else:
         col.warning(f"Image not found: {img_path}")
 
@@ -125,15 +94,18 @@ May the light of the Lord shine upon you and grant you happiness on this birthda
 """
 st.markdown(main_message, unsafe_allow_html=True)
 
-# --- Videos ---
-videos = ["videos/video1.mp4", "videos/video2.mp4"]
+# --- Videos Side by Side ---
+video_files = ["videos/video1.mp4", "videos/video2.mp4"]
 st.write("---")
 st.write("### Birthday Videos:")
-for vid in videos:
+video_cols = st.columns(len(video_files))
+
+for col, vid in zip(video_cols, video_files):
     if os.path.exists(vid):
-        st.video(vid)
+        col.video(vid)
     else:
-        st.warning(f"Video not found: {vid}")
+        col.warning(f"Video not found: {vid}")
 
 # --- Closing line ---
 st.markdown("<h3 style='text-align: center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
+
