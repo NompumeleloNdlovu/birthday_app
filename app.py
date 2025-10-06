@@ -93,7 +93,7 @@ else:
     st.warning("🎵 Music file not found!")
 
 # --- Title ---
-st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #ff4b4b;'> Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center;'>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
 # --- Gallery Images + Messages Side by Side ---
@@ -132,6 +132,6 @@ for col, vid in zip(cols_videos, video_files):
         col.video(vid, format="video/mp4", start_time=0)
     else:
         col.warning(f"Video not found: {vid}")
-
 # --- Closing line ---
-st.markdown("<h3 style='text-align: center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=T
+st.markdown("<h3 style='text-align: center;'> Here's to many more beautiful memories! </h3>", unsafe_allow_html=True)
+
