@@ -3,7 +3,7 @@ from PIL import Image, ImageOps
 import os
 
 # --- Page config ---
-st.set_page_config(page_title="Happy Birthday!", page_icon="🎉", layout="centered")
+st.set_page_config(page_title="Happy Birthday Kitso", page_icon=None, layout="centered")
 
 # --- Custom CSS ---
 st.markdown("""
@@ -37,7 +37,7 @@ h3 {
     line-height: 1.6;
     color: black;  /* Black text */
     font-family: 'Cinzel', serif;
-    /* Removed box-shadow to remove frame */
+    box-shadow: none;  /* Removed box shadow */
 }
 
 .gallery-frame {
@@ -54,7 +54,7 @@ h3 {
 }
 
 .gallery-frame img { 
-    width: 350px; 
+    width: 400px; 
     height: 300px; 
     object-fit: cover; 
     border-radius: 10px; 
@@ -72,7 +72,7 @@ h3 {
 """, unsafe_allow_html=True)
 
 # --- Title ---
-st.markdown("<h1>🎉 Happy Birthday, Kitso! 🎉</h1>", unsafe_allow_html=True)
+st.markdown("<h1>Happy Birthday Kitso</h1>", unsafe_allow_html=True)
 st.markdown("<h3>Wishing you an amazing day filled with love, laughter, and joy!</h3>", unsafe_allow_html=True)
 
 # --- Gallery images ---
@@ -86,9 +86,9 @@ cols = st.columns(len(gallery_items))
 for i, item in enumerate(gallery_items):
     with cols[i]:
         if os.path.exists(item["img"]):
-            # Open image and crop/resize (Pillow 10+ compatible)
+            # Open image and crop from bottom
             img = Image.open(item["img"])
-            img = ImageOps.fit(img, (350, 300), method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
+            img = ImageOps.fit(img, (400, 300), method=Image.Resampling.LANCZOS, centering=(0.5, 1.0))
             st.image(img, use_container_width=False)
             st.markdown(f"<div class='gallery-caption'>{item['msg']}</div>", unsafe_allow_html=True)
         else:
@@ -112,4 +112,4 @@ else:
     st.warning(f"Video not found: {video_file}")
 
 # --- Closing line ---
-st.markdown("<h3 style='text-align:center;'>🎂 Here's to many more beautiful memories! ❤️</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align:center;'>Here's to many more beautiful memories!</h3>", unsafe_allow_html=True)
